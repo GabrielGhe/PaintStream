@@ -5,10 +5,12 @@ var imageView;
 var context;
 var tool;
 var fayeClient;
+var clearBtn;
 
 $(document).ready(function(){
 	//Variables
 	imageView = $("#imageView");
+	clearBtn = $("#clear");
 	context = imageView[0].getContext('2d');
 	tool = new pencil();
 	fayeClient = new Faye.Client('http://localhost:3000/faye', {
@@ -16,15 +18,33 @@ $(document).ready(function(){
 	});
 
 	//Events
+	
+	//Subscription event
 	fayeClient.subscribe('/channel', function(message){
 		var obj = JSON.parse(message);
 		var func = tool[obj.type];
 		//if there is a method
 		if(func) func(obj.x, obj.y);
 	});
+
+	//Click event for clearing
+	clearBtn.click(function(){
+		var obj = {
+			type : "clear",
+			x : 0,
+			y : 0
+		};
+
+		fayeClient.publish("/channel", JSON.stringify(obj), function(err){
+          console.log( "Error ",err );
+        });
+	});
+
+	//mouse events
 	imageView.mousemove(cursorEvent);
 	imageView.mousedown(cursorEvent);
 	imageView.mouseup(cursorEvent);
+
 
 	/**
 	 * Does everything
@@ -74,4 +94,9 @@ function pencil(){
 	      context.stroke();
 	    }
 	};
+
+	//clear
+	this.clear = function(x,y){
+		context.clearRect(0, 0, imageView.width(), imageView.height());
+	}
 }

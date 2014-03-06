@@ -9,6 +9,13 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 
+//Get Faye module and create nodeAdapter
+var faye = require('faye');
+var bayeux = new faye.NodeAdapter({
+	mount: "/faye",
+	timeout: 45
+});
+
 var app = express();
 
 // all environments
@@ -31,8 +38,12 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
+app.get('/message', routes.message);
 app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
+//Attach to faye 
+var server = http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+bayeux.attach(server);

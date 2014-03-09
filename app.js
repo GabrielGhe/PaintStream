@@ -47,3 +47,5 @@ var server = http.createServer(app).listen(app.get('port'), function(){
 });
 
 bayeux.attach(server);
+var bayeuxEvents = require('./routes/events');
+bayeuxEvents.setup(bayeux);

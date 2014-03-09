@@ -6,11 +6,14 @@ var context;
 var tool;
 var fayeClient;
 var clearBtn;
+var subList;
+var subId = "";
 
 $(document).ready(function(){
 	//Variables
 	imageView = $("#imageView");
 	clearBtn = $("#clear");
+	subList = $("#subs");
 	context = imageView[0].getContext('2d');
 	tool = new pencil();
 	fayeClient = new Faye.Client('http://localhost:3000/faye', {
@@ -24,7 +27,7 @@ $(document).ready(function(){
 		var obj = JSON.parse(message);
 		var func = tool[obj.type];
 		//if there is a method
-		if(func) func(obj.x, obj.y);
+		if(func) func(obj);
 	});
 
 	//Click event for clearing
@@ -32,7 +35,8 @@ $(document).ready(function(){
 		var obj = {
 			type : "clear",
 			x : 0,
-			y : 0
+			y : 0,
+			clientId : subId
 		};
 
 		fayeClient.publish("/channel", JSON.stringify(obj), function(err){
@@ -56,47 +60,55 @@ $(document).ready(function(){
 		var obj = {
 			type: ev.type,
 			x : x,
-			y : y
+			y : y,
+			clientId : subId
 		};
 		fayeClient.publish("/channel", JSON.stringify(obj), function(err){
           console.log( "Error ",err );
         });
 	}
-});
 
+	/**
+	 * Pencil Object
+	 */
+	function pencil(){
+		var tool = this;
+		this.started = false;
 
-/**
- * Pencil Object
- */
-function pencil(){
-	var tool = this;
-	this.started = false;
+		//Mouseup
+		this.mouseup = function(obj){
+			if (tool.started) {
+		      tool.mousemove(obj.x, obj.y);
+		      tool.started = false;
+		    };
+		};
 
-	//Mouseup
-	this.mouseup = function(x, y){
-		if (tool.started) {
-	      tool.mousemove(x, y);
-	      tool.started = false;
-	    };
-	};
+		//Mousedown
+		this.mousedown = function(obj){
+			context.beginPath();
+			context.moveTo(obj.x, obj.y);
+			tool.started = true;
+		};
 
-	//Mousedown
-	this.mousedown = function(x, y){
-		context.beginPath();
-		context.moveTo(x, y);
-		tool.started = true;
-	};
+		//mousemove
+		this.mousemove = function(obj){
+			if (tool.started) {
+		      context.lineTo(obj.x, obj.y);
+		      context.stroke();
+		    }
+		};
 
-	//mousemove
-	this.mousemove = function(x, y){
-		if (tool.started) {
-	      context.lineTo(x, y);
-	      context.stroke();
-	    }
-	};
+		//clear
+		this.clear = function(obj){
+			context.clearRect(0, 0, imageView.width(), imageView.height());
+		};
 
-	//clear
-	this.clear = function(x,y){
-		context.clearRect(0, 0, imageView.width(), imageView.height());
+		//subscribe
+		this.subscribe = function(obj){
+			if(subId == ""){
+				subId = obj.clientId;
+			}
+			subList.append("<li>" + obj.clientId + "</li>");
+		}
 	}
-}
+});

@@ -1,5 +1,6 @@
 //http://stackoverflow.com/questions/5751458/getting-correct-mouse-position-in-a-css-scaled-canvas
 //http://dev.opera.com/articles/view/html5-canvas-painting/
+//http://wesbos.com/html5-canvas-websockets-nodejs/
 
 var imageView;
 var context;

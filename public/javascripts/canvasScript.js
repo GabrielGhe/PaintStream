@@ -72,14 +72,15 @@ $(document).ready(function(){
 	/**
 	 * Pencil Object
 	 */
-	function pencil(){
-		var tool = this;
+	function pencil(element,ctx){
+		var tool = element;
+		var context = ctx;
 		this.started = false;
 
 		//Mouseup
 		this.mouseup = function(obj){
 			if (tool.started) {
-		      tool.mousemove(obj.x, obj.y);
+		      tool.moveTo(obj.x, obj.y);
 		      tool.started = false;
 		    };
 		};
@@ -109,7 +110,6 @@ $(document).ready(function(){
 			if(subId == ""){
 				subId = obj.clientId;
 			}
-			subList.append("<li>" + obj.clientId + "</li>");
 		}
 	}
 });

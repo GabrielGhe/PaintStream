@@ -27,7 +27,15 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
  * ############################################################################### */
 
  MyApp.controller("HomeController", ["$scope", "$location", function($scope, $location){
- 	//Variable declarations
+
+ 	/**
+ 	 * Init
+ 	 */
+ 	$scope.Init = function(){
+ 		var arr = [];
+ 		$scope.members = arr;
+ 		$scope.subId = "";
+ 	}
  	
  	/**
  	 * Clear Canvas
@@ -54,11 +62,38 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
  	}
 
  	/**
+ 	 * adds a participant to the list
+ 	 */
+ 	$scope.addMember = function(obj){
+ 		$scope.$apply(function(){
+ 			$scope.members.push(obj);
+ 		});
+ 	}
+
+ 	/**
+ 	 * Removes a participant from the list
+ 	 */
+ 	$scope.removeMember = function(id){
+ 		$scope.$apply(function(){
+ 			var arr = $scope.members;
+ 			for(var i = arr.length - 1; i != 0; i--){
+ 				if(arr[i].id == id){
+ 					arr.splice(i, 1);
+ 					break;
+ 				}
+ 			}
+ 			$scope.members = arr;
+ 		});
+ 	}
+
+ 	/**
 		Method used to go to different routes
 	 */
 	$scope.go = function ( hash ) {
 		$location.path(hash);
 	};
+
+	$scope.Init();
  }]);
 
 /* ###############################################################################
@@ -192,6 +227,14 @@ function pencil(scope, element, ctx){
 	this.subscribe = function(obj){
 		if($scope.subId == ""){
 			$scope.subId = obj.clientId;
+			$scope.addMember({ type: 'myIdClass', id: obj.clientId });
+		} else {
+			$scope.addMember({ type: 'otherIdClass', id: obj.clientId });
 		}
+	};
+
+	//unsubscribe
+	this.unsubscribe = function(obj){
+		$scope.removeMember(obj.clientId);
 	};
 }

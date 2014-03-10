@@ -1,6 +1,8 @@
 //http://stackoverflow.com/questions/5751458/getting-correct-mouse-position-in-a-css-scaled-canvas
 //http://dev.opera.com/articles/view/html5-canvas-painting/
 //http://wesbos.com/html5-canvas-websockets-nodejs/
+//http://plnkr.co/edit/aG4paH?p=preview
+//https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Canvas_tutorial
 
 var fayeClient = new Faye.Client('http://localhost:3000/faye', {
 	timeout : 120
@@ -26,6 +28,30 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 
  MyApp.controller("HomeController", ["$scope", "$location", function($scope, $location){
  	//Variable declarations
+ 	
+ 	/**
+ 	 * Clear Canvas
+ 	 */
+ 	$scope.clear = function(){
+ 		var obj = {
+			type: "clear",
+			clientId : $scope.subId,
+			pre : {
+				x : 0,
+				y : 0
+			},
+			op : {
+				lX : 0,
+				lY : 0,
+				cX : 0,
+				cY : 0
+			}
+		};
+
+		fayeClient.publish("/channel", JSON.stringify(obj), function(err){
+          console.log( "Error ",err );
+        });
+ 	}
 
  	/**
 		Method used to go to different routes
@@ -73,13 +99,20 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 			var func = tool[ev.type];
 			var obj = {
 				type: ev.type,
-				x : x,
-				y : y,
-				clientId : $scope.subId
+				clientId : $scope.subId,
+				pre : {
+					x : x,
+					y : y
+				},
+				op : {
+					lX : 0,
+					lY : 0,
+					cX : 0,
+					cY : 0
+				}
+
 			};
-			fayeClient.publish("/channel", JSON.stringify(obj), function(err){
-	          console.log( "Error ",err );
-	        });
+			if(func) func(obj);
 		}
 
 		//bind events
@@ -97,9 +130,14 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
  * ##
  * ############################################################################### */
 function pencil(scope, element, ctx){
-	var tool = element;
+	//Variables
+	var tool = this;
+	var element = element;
 	var context = ctx;
 	var $scope = scope;
+	var lastX;
+	var lastY;
+
 	this.started = false;
 
 	//Mouseup
@@ -111,22 +149,43 @@ function pencil(scope, element, ctx){
 
 	//Mousedown
 	this.mousedown = function(obj){
+		lastX = obj.pre.x;
+		lastY = obj.pre.y;
 		context.beginPath();
-		context.moveTo(obj.x, obj.y);
 		tool.started = true;
 	};
 
 	//mousemove
 	this.mousemove = function(obj){
 		if (tool.started) {
-	      context.lineTo(obj.x, obj.y);
-	      context.stroke();
+			obj.op.lX = lastX;
+			obj.op.lY = lastY;
+	      	obj.op.cX = obj.pre.x;
+	      	obj.op.cY = obj.pre.y;
+	      	obj.pre.x = 0;
+	      	obj.pre.y = 0;
+	      	obj.type = "draw";
+
+	      	fayeClient.publish("/channel", JSON.stringify(obj), function(err){
+	          console.log( "Error ",err );
+	        });
+
+			lastX = obj.op.cX;
+			lastY = obj.op.cY;
 	    }
 	};
 
 	//clear
 	this.clear = function(obj){
-		context.clearRect(0, 0, imageView.width(), imageView.height());
+		element[0].width = element[0].width; 
+	};
+
+	//draw
+	this.draw = function(obj){
+        ctx.moveTo(obj.op.lX,obj.op.lY);//from
+        ctx.lineTo(obj.op.cX,obj.op.cY);//to
+        ctx.strokeStyle = "#4bf";//color
+        ctx.stroke();//draw it
 	};
 
 	//subscribe
@@ -134,5 +193,5 @@ function pencil(scope, element, ctx){
 		if($scope.subId == ""){
 			$scope.subId = obj.clientId;
 		}
-	}
+	};
 }

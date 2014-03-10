@@ -4,21 +4,52 @@ body {
 }
 
 #container {
-	position: relative;
+	position: absolute;
 	height:100%;
 	width:100%;
 }
 
-#imageView {
-	margin:50px;
+#leftTools {
+	float:left;
+	height: 100%;
+	width: 100px;
+	background-color:purple;
+}
+
+#centerCanvas {
+	float:left;
+	height:100%;
+	width: -webkit-calc(70% - 100px);
+	width:    -moz-calc(70% - 100px);
+	width:		-o-calc(70% - 100px);
+	width: 		   calc(70% - 100px);
+	min-width:700px;
+	min-height:500px;
+}
+
+#centerCanvas table {
+	width:100%;
+	height:100%;
+}
+
+#rightInfo {
+	float:left;
+	height:100%;
+	width: 30%;
+	background-color: orange;
+}
+
+#theCanvas {
+	display:block;
+	margin:auto;
 	border:1px solid black;
 }
 
 #clear {
 	width: -webkit-calc(100% - 100px);
 	width:    -moz-calc(100% - 100px);
-	width: 	 -o-calc(100% - 100px);
-	width: 		calc(100% - 100px);
+	width:		-o-calc(100% - 100px);
+	width: 		   calc(100% - 100px);
 	height:50px;
 	font-size:140%;
 	margin:50px 50px 0 50px;

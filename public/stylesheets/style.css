@@ -45,12 +45,31 @@ body {
 	border:1px solid black;
 }
 
-#clear {
-	width: -webkit-calc(100% - 100px);
-	width:    -moz-calc(100% - 100px);
-	width:		-o-calc(100% - 100px);
-	width: 		   calc(100% - 100px);
-	height:50px;
-	font-size:140%;
-	margin:50px 50px 0 50px;
-}
+/* ###############################################################################
+ * ##
+ * ##							Classes
+ * ##
+ * ############################################################################### */
+
+ .rightInfo_msg {
+ 	width: -webkit-calc(100% - 20px);
+	width:    -moz-calc(100% - 20px);
+	width:		-o-calc(100% - 20px);
+	width: 		   calc(100% - 20px);
+	margin: 5px 10px 0px 10px;
+    -moz-box-shadow: 1px 1px 2px 0px #000000;
+    -webkit-box-shadow: 1px 1px 2px 0px #000000;
+    box-shadow: 1px 1px 2px 0px #000000;
+     -webkit-border-radius: 6px; 
+              border-radius: 6px;
+    background-clip: padding-box;
+    text-align: center;
+ }
+
+ .myIdClass {
+ 	background-color:lightgreen;
+ }
+
+ .otherIdClass {
+ 	background-color:lightblue;
+ }

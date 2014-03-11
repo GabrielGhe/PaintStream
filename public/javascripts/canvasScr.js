@@ -37,7 +37,7 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
  	 * Init
  	 */
  	$scope.Init = function(){
- 		var arr = [];
+ 		var arr = [{ type: 'myIdClass', id: "Hi this is me"}];
  		$scope.members = arr;
  		$scope.subId = "";
  	}

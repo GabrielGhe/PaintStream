@@ -243,3 +243,11 @@ function pencil(scope, element, ctx){
 		$scope.removeMember(obj.clientId);
 	};
 }
+
+/*
+for (var key in p) {
+  if (p.hasOwnProperty(key)) {
+    alert(key + " -> " + p[key]);
+  }
+}
+*/

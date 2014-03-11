@@ -119,7 +119,7 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
     	/**
 		 * Does everything
 		 */
-		function cursorEvent(ev){
+		function cursorEvent(event){
 			//get x and y coordinates
 			var x;
 			var y;
@@ -238,3 +238,11 @@ function pencil(scope, element, ctx){
 		$scope.removeMember(obj.clientId);
 	};
 }
+
+/*
+for (var key in p) {
+  if (p.hasOwnProperty(key)) {
+    alert(key + " -> " + p[key]);
+  }
+}
+*/

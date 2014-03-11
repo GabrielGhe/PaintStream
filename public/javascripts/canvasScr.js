@@ -37,7 +37,7 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
  	 * Init
  	 */
  	$scope.Init = function(){
- 		var arr = [{ type: 'myIdClass', id: "Hi this is me"}];
+ 		var arr = [];
  		$scope.members = arr;
  		$scope.subId = "";
  	}
@@ -136,9 +136,9 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 	          y = event.layerY - event.currentTarget.offsetTop;
 	        }
 
-			var func = tool[ev.type];
+			var func = tool[event.type];
 			var obj = {
-				type: ev.type,
+				type: event.type,
 				clientId : $scope.subId,
 				pre : {
 					x : x,

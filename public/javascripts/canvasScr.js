@@ -124,7 +124,7 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
     	/**
 		 * Does everything
 		 */
-		function cursorEvent(ev){
+		function cursorEvent(event){
 			//get x and y coordinates
 			var x;
 			var y;

@@ -6,8 +6,17 @@
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
+var drawIns = require('./model/drawIns');
 var http = require('http');
 var path = require('path');
+
+
+//Mongoose connecting
+var mongoose = require('mongoose');
+mongoose.connect("localhost");
+mongoose.connection.on('error', function() {
+  console.error('✗ MongoDB Connection Error. Please make sure MongoDB is running.');
+});
 
 //Get Faye module and create nodeAdapter
 var faye = require('faye');

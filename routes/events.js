@@ -1,12 +1,16 @@
+var DrawIns = require('../model/drawIns');
+
 /**
  * Setting up the bayeux events
  */
 exports.setup = function(bay){
 	var bayeux = bay;
 
+	/*
 	bayeux.getClient().subscribe('/channel', function(message) {
 	  console.log(message);
 	});
+	*/
 
 	bayeux.on('subscribe', function(clientId, channel) {
 	  console.log('[  SUBSCRIBE] ' + clientId + ' -> ' + channel);
@@ -35,7 +39,7 @@ exports.setup = function(bay){
 	});
 
 	bayeux.on('disconnect', function(clientId) {
-	  console.log('[ DISCONNECT] ' + clientId);
+		console.log('[ DISCONNECT] ' + clientId);
 	});
 };
 

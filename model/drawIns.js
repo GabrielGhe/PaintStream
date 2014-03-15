@@ -60,6 +60,50 @@ citySchema.statics.getCityByName = function(req, res, City){
     });
 }
 
-module.exports = mongoose.model('City', citySchema, "City");
+module.exports = mongoose.model('City', citySchema);
 */
+
+var mongoose = require('mongoose');
+
+var drawInsSchema = mongoose.Schema({
+	users : Array
+});
+
+/**
+ * Method used to create new session
+ */
+drawInsSchema.statics.createSingleDrawIns = function(res){
+	var entry = new this({ users : [] });
+	entry.save();
+	console.log("Created new Draw Instance " + entry.id);
+	res.redirect(301, "/" + entry.id);
+}
+
+/**
+ * Method used to save a single user
+ * @param  {string} user_id [Id of the user]
+ * @param  {string} sess_id [Id of the session]
+ */
+drawInsSchema.statics.saveSingleUser = function(user_id, sess_id){
+	console.log("Saving to sid:" + sess_id + " uid:" + user_id);
+}
+
+/**
+ * Method to remove a session given the id
+ * @param  {string} id [Id of the session]
+ */
+drawInsSchema.statics.removeSingleDrawIns = function(id){
+	console.log("Removing session " + id);
+}
+
+/**
+ * Method to remove a single user
+ * @param  {string} user_id [Id of the user]
+ * @param  {string} sess_id [Id of the session]
+ */
+drawInsSchema.statics.removeSingleUser = function(user_id, sess_id){
+	console.log("Removing from sid:" + sess_id + " uid:" + user_id);
+}
+
+module.exports = mongoose.model('DrawIns', drawInsSchema, 'DrawIns');
 

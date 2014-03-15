@@ -1,12 +1,16 @@
+var DrawIns = require('../model/drawIns');
+
 /**
  * Setting up the bayeux events
  */
 exports.setup = function(bay){
 	var bayeux = bay;
 
+	/*
 	bayeux.getClient().subscribe('/channel', function(message) {
 	  console.log(message);
 	});
+	*/
 
 	bayeux.on('subscribe', function(clientId, channel) {
 	  console.log('[  SUBSCRIBE] ' + clientId + ' -> ' + channel);
@@ -16,7 +20,8 @@ exports.setup = function(bay){
 			y : 0,
 			clientId : clientId
 		};
-		bayeux.getClient().publish('/channel', JSON.stringify(obj), function(err){
+		DrawIns.saveSingleUser(clientId, channel);
+		bayeux.getClient().publish(channel, JSON.stringify(obj), function(err){
 			console.log( "Error ",err );
 		});
 	});
@@ -29,13 +34,14 @@ exports.setup = function(bay){
 			y : 0,
 			clientId : clientId
 		};
-		bayeux.getClient().publish('/channel', JSON.stringify(obj), function(err){
+		DrawIns.removeSingleUser(clientId, channel);
+		bayeux.getClient().publish(channel, JSON.stringify(obj), function(err){
 			console.log( "Error ",err );
 		});
 	});
 
 	bayeux.on('disconnect', function(clientId) {
-	  console.log('[ DISCONNECT] ' + clientId);
+		console.log('[ DISCONNECT] ' + clientId);
 	});
 };
 

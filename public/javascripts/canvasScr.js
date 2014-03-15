@@ -18,7 +18,7 @@ var MyApp = angular.module('MyApp', ['ngRoute', 'ngAnimate' , 'ui.bootstrap']);
 //Routing Configuration 
 MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 	$routeProvider
-		.when('/', { templateUrl : "partials/home.html", controller : "HomeController"})
+		.when('/:id', { templateUrl : "partials/drawIns.html", controller : "DrawInsController"})
 		.otherwise({ redirectTo : '/'});
 
 	$locationProvider.html5Mode(true);
@@ -31,13 +31,14 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
  * ##
  * ############################################################################### */
 
- MyApp.controller("HomeController", ["$scope", "$location", function($scope, $location){
+ MyApp.controller("DrawInsController", ["$scope", "$location", "$routeParams", function($scope, $location, $routeParams){
 
  	/**
  	 * Init
  	 */
  	$scope.Init = function(){
  		var arr = [];
+ 		$scope.drawId = $routeParams.id;
  		$scope.members = arr;
  		$scope.subId = "";
  	}
@@ -61,7 +62,7 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 			}
 		};
 
-		fayeClient.publish("/channel", JSON.stringify(obj), function(err){
+		fayeClient.publish("/" + $scope.drawId, JSON.stringify(obj), function(err){
           console.log( "Error ",err );
         });
  	}
@@ -111,10 +112,11 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
     restrict: "A",
     link: function($scope, element){
     	var ctx = element[0].getContext('2d');
-		var tool = new pencil($scope, element, ctx);
+    	var drawId = $scope.drawId;
+		var tool = new pencil($scope, element, ctx, drawId);
 
 		//Subscription event
-		fayeClient.subscribe('/channel', function(message){
+		fayeClient.subscribe('/' + drawId, function(message){
 			var obj = JSON.parse(message);
 			var func = tool[obj.type];
 			//if there is a method
@@ -140,6 +142,7 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 			var obj = {
 				type: event.type,
 				clientId : $scope.subId,
+				drawIns : drawId,
 				pre : {
 					x : x,
 					y : y
@@ -150,7 +153,6 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 					cX : 0,
 					cY : 0
 				}
-
 			};
 			if(func) func(obj);
 		}
@@ -169,12 +171,14 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
  * ##							Tool Object
  * ##
  * ############################################################################### */
-function pencil(scope, element, ctx){
+function pencil(scope, element, ctx, ch){
 	//Variables
 	var tool = this;
 	var element = element;
 	var context = ctx;
 	var $scope = scope;
+	var channel = ch;
+
 	var lastX;
 	var lastY;
 
@@ -206,7 +210,7 @@ function pencil(scope, element, ctx){
 	      	obj.pre.y = 0;
 	      	obj.type = "draw";
 
-	      	fayeClient.publish("/channel", JSON.stringify(obj), function(err){
+	      	fayeClient.publish("/" + channel, JSON.stringify(obj), function(err){
 	          console.log( "Error ",err );
 	        });
 

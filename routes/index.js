@@ -1,10 +1,16 @@
+var DrawIns = require('../model/drawIns');
 
 /*
  * GET home page.
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'PaintStream' });
+	//create new DrawIns and redirect
+	DrawIns.createSingleDrawIns(res);
+};
+
+exports.instance = function(req, res){
+	res.render('drawIns', { title: 'PaintStream' });
 };
 
 exports.message = function(req, res){

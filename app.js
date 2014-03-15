@@ -47,6 +47,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
+app.get('/:id', routes.instance);
 app.get('/message', routes.message);
 app.get('/users', user.list);
 

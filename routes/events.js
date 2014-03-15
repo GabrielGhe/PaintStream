@@ -38,3 +38,6 @@ exports.setup = function(bay){
 	  console.log('[ DISCONNECT] ' + clientId);
 	});
 };
+
+//SETUP FAYE EXTENSION
+//http://faye.jcoglan.com/node/extensions.html

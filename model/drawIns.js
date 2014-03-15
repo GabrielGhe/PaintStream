@@ -70,6 +70,23 @@ var drawInsSchema = mongoose.Schema({
 });
 
 /**
+ * Method to close DrawIns
+ * @param  {String} sess_id [id of session]
+ */
+drawInsSchema.statics.removeSessionIfEmpty = function(sess_id){
+	var good_sess_id = sess_id.substring(1);
+	this.findOne({ _id : good_sess_id}, function(err, obj){
+		if(!err){
+			if(obj && obj.users.length == 0){
+				obj.remove();
+			}
+		} else {
+			console.log(err);
+		}
+	});
+}
+
+/**
  * Method used to create new session
  */
 drawInsSchema.statics.createSingleDrawIns = function(res){
@@ -85,19 +102,11 @@ drawInsSchema.statics.createSingleDrawIns = function(res){
  * @param  {string} sess_id [Id of the session]
  */
 drawInsSchema.statics.saveSingleUser = function(user_id, sess_id){
+	var Model = this;
 	var good_sess_id = sess_id.substring(1);
-
-	this.findOneAndUpdate({ _id : good_sess_id}, {$push : { users : user_id }}, function(err, model){
+	Model.findOneAndUpdate({ _id : good_sess_id}, {$push : { users : user_id }}, function(err, model){
 		if(err) console.log(err);
 	});
-}
-
-/**
- * Method to remove a session given the id
- * @param  {string} id [Id of the session]
- */
-drawInsSchema.statics.removeSingleDrawIns = function(id){
-	console.log("Removing session " + id);
 }
 
 /**
@@ -106,10 +115,14 @@ drawInsSchema.statics.removeSingleDrawIns = function(id){
  * @param  {string} sess_id [Id of the session]
  */
 drawInsSchema.statics.removeSingleUser = function(user_id, sess_id){
+	var Model = this;
 	var good_sess_id = sess_id.substring(1);
-	console.log("Removing from sid:" + sess_id + " uid:" + user_id);
-	this.update({ '_id' : good_sess_id}, {$pull : {users : user_id}}, function(err, model){
-		if(err) console.log(err);
+	Model.update({ '_id' : good_sess_id}, {$pull : {users : user_id}}, function(err, model){
+		if(!err){
+			Model.removeSessionIfEmpty(sess_id);
+		} else {
+			console.log(err);
+		}
 	});
 }
 

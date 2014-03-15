@@ -39,7 +39,6 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
  	$scope.Init = function(){
  		var arr = [];
  		$scope.drawId = $routeParams.id;
- 		console.log($scope.drawId);
  		$scope.members = arr;
  		$scope.subId = "";
  	}
@@ -63,7 +62,7 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 			}
 		};
 
-		fayeClient.publish("/channel", JSON.stringify(obj), function(err){
+		fayeClient.publish("/" + $scope.drawId, JSON.stringify(obj), function(err){
           console.log( "Error ",err );
         });
  	}
@@ -113,10 +112,11 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
     restrict: "A",
     link: function($scope, element){
     	var ctx = element[0].getContext('2d');
-		var tool = new pencil($scope, element, ctx);
+    	var drawId = $scope.drawId;
+		var tool = new pencil($scope, element, ctx, drawId);
 
 		//Subscription event
-		fayeClient.subscribe('/channel', function(message){
+		fayeClient.subscribe('/' + drawId, function(message){
 			var obj = JSON.parse(message);
 			var func = tool[obj.type];
 			//if there is a method
@@ -142,7 +142,7 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 			var obj = {
 				type: event.type,
 				clientId : $scope.subId,
-				drawIns : $scope.drawId,
+				drawIns : drawId,
 				pre : {
 					x : x,
 					y : y
@@ -153,7 +153,6 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 					cX : 0,
 					cY : 0
 				}
-
 			};
 			if(func) func(obj);
 		}
@@ -172,12 +171,14 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
  * ##							Tool Object
  * ##
  * ############################################################################### */
-function pencil(scope, element, ctx){
+function pencil(scope, element, ctx, ch){
 	//Variables
 	var tool = this;
 	var element = element;
 	var context = ctx;
 	var $scope = scope;
+	var channel = ch;
+
 	var lastX;
 	var lastY;
 
@@ -209,7 +210,7 @@ function pencil(scope, element, ctx){
 	      	obj.pre.y = 0;
 	      	obj.type = "draw";
 
-	      	fayeClient.publish("/channel", JSON.stringify(obj), function(err){
+	      	fayeClient.publish("/" + channel, JSON.stringify(obj), function(err){
 	          console.log( "Error ",err );
 	        });
 

@@ -66,7 +66,7 @@ module.exports = mongoose.model('City', citySchema);
 var mongoose = require('mongoose');
 
 var drawInsSchema = mongoose.Schema({
-	users : Array
+	users : [String]
 });
 
 /**
@@ -85,7 +85,11 @@ drawInsSchema.statics.createSingleDrawIns = function(res){
  * @param  {string} sess_id [Id of the session]
  */
 drawInsSchema.statics.saveSingleUser = function(user_id, sess_id){
-	console.log("Saving to sid:" + sess_id + " uid:" + user_id);
+	var good_sess_id = sess_id.substring(1);
+
+	this.findOneAndUpdate({ _id : good_sess_id}, {$push : { users : user_id }}, function(err, model){
+		if(err) console.log(err);
+	});
 }
 
 /**
@@ -102,7 +106,11 @@ drawInsSchema.statics.removeSingleDrawIns = function(id){
  * @param  {string} sess_id [Id of the session]
  */
 drawInsSchema.statics.removeSingleUser = function(user_id, sess_id){
+	var good_sess_id = sess_id.substring(1);
 	console.log("Removing from sid:" + sess_id + " uid:" + user_id);
+	this.update({ '_id' : good_sess_id}, {$pull : {users : user_id}}, function(err, model){
+		if(err) console.log(err);
+	});
 }
 
 module.exports = mongoose.model('DrawIns', drawInsSchema, 'DrawIns');

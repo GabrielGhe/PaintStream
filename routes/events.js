@@ -20,7 +20,8 @@ exports.setup = function(bay){
 			y : 0,
 			clientId : clientId
 		};
-		bayeux.getClient().publish('/channel', JSON.stringify(obj), function(err){
+		DrawIns.saveSingleUser(clientId, channel);
+		bayeux.getClient().publish(channel, JSON.stringify(obj), function(err){
 			console.log( "Error ",err );
 		});
 	});
@@ -33,7 +34,8 @@ exports.setup = function(bay){
 			y : 0,
 			clientId : clientId
 		};
-		bayeux.getClient().publish('/channel', JSON.stringify(obj), function(err){
+		DrawIns.removeSingleUser(clientId, channel);
+		bayeux.getClient().publish(channel, JSON.stringify(obj), function(err){
 			console.log( "Error ",err );
 		});
 	});

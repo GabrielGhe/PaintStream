@@ -3,6 +3,13 @@ body {
   margin: 0px;
 }
 
+/* ###############################################################################
+ * ##
+ * ##							IDS
+ * ##
+ * ############################################################################### */
+
+
 #container {
 	position: absolute;
 	height:100%;
@@ -57,11 +64,11 @@ body {
 	width:		-o-calc(100% - 20px);
 	width: 		   calc(100% - 20px);
 	margin: 5px 10px 0px 10px;
-    -moz-box-shadow: 1px 1px 2px 0px #000000;
     -webkit-box-shadow: 1px 1px 2px 0px #000000;
-    box-shadow: 1px 1px 2px 0px #000000;
-     -webkit-border-radius: 6px; 
-              border-radius: 6px;
+       -moz-box-shadow: 1px 1px 2px 0px #000000;
+    		box-shadow: 1px 1px 2px 0px #000000;
+    -webkit-border-radius: 6px; 
+            border-radius: 6px;
     background-clip: padding-box;
     text-align: center;
  }
@@ -73,3 +80,56 @@ body {
  .otherIdClass {
  	background-color:lightblue;
  }
+
+
+ /* 
+ * ###############################################################################
+ * ##
+ * ##							Animation Classes
+ * ##
+ * ############################################################################### 
+ http://www.yearofmoo.com/2013/08/remastered-animation-in-angularjs-1-2.html
+ */
+
+/**
+ * Animation for view enter
+ */
+/*
+.viewAnimClass.ng-enter {
+	-webkit-animation:1s viewAnim;
+			animation:1s viewAnim;
+}
+@-webkit-keyframes viewAnim {
+	0%	{opacity:0;}
+	20%	{opacity:0.4;}
+	100%{opacity:1;}
+}
+@keyframes viewAnim {
+	0%	{opacity:0;}
+	20%	{opacity:0.4;}
+	100%{opacity:1;}
+}
+*/
+
+/**
+ * Animation for ngrepeat item
+ */
+.rightInfo_msg.ng-enter,
+.rightInfo_msg.ng-leave {
+	-webkit-transition:0.5s linear all;
+	   		transition:0.5s linear all;
+}
+
+/*Beginning of enter and ending of leave*/
+.rightInfo_msg.ng-enter,
+.rightInfo_msg.ng-leave.ng-leave-active {
+	opacity:0;
+}
+
+/*Beginning of leave and ending of enter*/
+.rightInfo_msg.ng-leave,
+.rightInfo_msg.ng-enter.ng-enter-active {
+	opacity:1;
+}
+
+

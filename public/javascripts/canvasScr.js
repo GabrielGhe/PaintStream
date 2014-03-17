@@ -4,6 +4,7 @@
 //http://wesbos.com/html5-canvas-websockets-nodejs/
 //http://plnkr.co/edit/aG4paH?p=preview
 //https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Canvas_tutorial
+//http://www.creativebloq.com/design/learning-basics-html5-canvas-7112879
 
 //Angular
 //http://www.yearofmoo.com/2013/08/remastered-animation-in-angularjs-1-2.html

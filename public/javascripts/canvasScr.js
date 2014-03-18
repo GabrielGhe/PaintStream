@@ -161,6 +161,15 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 		element.bind('mousedown', cursorEvent);
 		element.bind('mousemove', cursorEvent);
 		element.bind('mouseup', cursorEvent);
+
+		//makes the canvas the right size
+		$(window).resize(resizeCanvas);
+	    function resizeCanvas() {
+	    	var canvas = $(element);
+            canvas.attr("width", $("#centerCanvas").width());
+            canvas.attr("height", $("#centerCanvas").height());
+	    }
+	    resizeCanvas();
     }
   };
 });

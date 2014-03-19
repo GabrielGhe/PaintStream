@@ -189,6 +189,7 @@ function pencil(scope, element, ctx, ch){
 	var $scope = scope;
 	var channel = ch;
 
+	//Coordinates used for drawing
 	var lastX;
 	var lastY;
 
@@ -209,21 +210,27 @@ function pencil(scope, element, ctx, ch){
 		tool.started = true;
 	};
 
-	//mousemove
+	//Mousemove
 	this.mousemove = function(obj){
 		if (tool.started) {
+			//last coordinates
 			obj.op.lX = lastX;
 			obj.op.lY = lastY;
+			//current coordinates
 	      	obj.op.cX = obj.pre.x;
 	      	obj.op.cY = obj.pre.y;
+	      	//null unused data
 	      	obj.pre.x = 0;
 	      	obj.pre.y = 0;
+	      	//draw function
 	      	obj.type = "draw";
 
+	      	//Publish the object
 	      	fayeClient.publish("/" + channel, JSON.stringify(obj), function(err){
 	          console.log( "Error ",err );
 	        });
 
+	      	//new = old coordinates
 			lastX = obj.op.cX;
 			lastY = obj.op.cY;
 	    }

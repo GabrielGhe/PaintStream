@@ -12,6 +12,10 @@ exports.setup = function(bay){
 	});
 	*/
 
+	/**
+	 * The subscribe event
+	 * Happens when a new user subscribes to a channel
+	 */
 	bayeux.on('subscribe', function(clientId, channel) {
 	  console.log('[  SUBSCRIBE] ' + clientId + ' -> ' + channel);
 	  var obj = {
@@ -26,6 +30,10 @@ exports.setup = function(bay){
 		});
 	});
 
+	/**
+	 * The unsubsribe event
+	 * Happens when a user unsubsribes, closes tab or loses connection
+	 */
 	bayeux.on('unsubscribe', function(clientId, channel) {
 		console.log('[UNSUBSCRIBE] ' + clientId + ' -> ' + channel);
 		var obj = {
@@ -40,6 +48,10 @@ exports.setup = function(bay){
 		});
 	});
 
+	/**
+	 * The disconnect event
+	 * Happens right after the subsribe event
+	 */
 	bayeux.on('disconnect', function(clientId) {
 		console.log('[ DISCONNECT] ' + clientId);
 	});

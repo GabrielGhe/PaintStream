@@ -126,5 +126,20 @@ drawInsSchema.statics.removeSingleUser = function(user_id, sess_id){
 	});
 }
 
+
+drawInsSchema.statics.getUsers = function(sess_id, res){
+	var Model = this;
+	Model.findOne({ "_id" : sess_id }, function(err, obj){
+		var users;
+		if(!err && obj){
+			users = obj.users;
+		} else {
+			users = [];
+			if(err) console.log(err);
+		}
+		res.render('drawIns', { title: 'PaintStream', users: users });
+	});
+}
+
 module.exports = mongoose.model('DrawIns', drawInsSchema, 'DrawIns');
 

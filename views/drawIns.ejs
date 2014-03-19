@@ -9,6 +9,12 @@
     <!-- END CSS -->
 
     <!-- SCRIPTS -->
+      <script>
+          nameArr = [];
+          <% for(var i = 0; i < users.length; i++){ %>
+            nameArr.push({ type: 'otherIdClass', id: "<%= users[i] %>"});
+          <% } %>
+      </script>
       <script type="text/javascript" src="/lib/javascripts/jquery.min.js"></script>
       <script type="text/javascript" src="/lib/javascripts/faye.js"></script>
       <script type="text/javascript" src="/lib/javascripts/angular.min.js"></script>

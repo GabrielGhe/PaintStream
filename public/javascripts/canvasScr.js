@@ -5,6 +5,7 @@
 //http://plnkr.co/edit/aG4paH?p=preview
 //https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Canvas_tutorial
 //http://www.creativebloq.com/design/learning-basics-html5-canvas-7112879
+//http://stackoverflow.com/questions/7812514/drawing-a-dot-on-html5-canvas
 
 //Angular
 //http://www.yearofmoo.com/2013/08/remastered-animation-in-angularjs-1-2.html
@@ -38,9 +39,8 @@ MyApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
  	 * Init
  	 */
  	$scope.Init = function(){
- 		var arr = [];
  		$scope.drawId = $routeParams.id;
- 		$scope.members = arr;
+ 		$scope.members = nameArr;
  		$scope.subId = "";
  	}
  	
@@ -244,12 +244,12 @@ function pencil(scope, element, ctx, ch){
 
 	//subscribe
 	this.subscribe = function(obj){
+		var toAdd = { type: 'otherIdClass', id: obj.clientId };
 		if($scope.subId == ""){
 			$scope.subId = obj.clientId;
-			$scope.addMember({ type: 'myIdClass', id: obj.clientId });
-		} else {
-			$scope.addMember({ type: 'otherIdClass', id: obj.clientId });
+			toAdd.type = 'myIdClass';
 		}
+		$scope.addMember(toAdd);
 	};
 
 	//unsubscribe

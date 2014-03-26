@@ -1,11 +1,15 @@
 //Canvas
 //http://stackoverflow.com/questions/5751458/getting-correct-mouse-position-in-a-css-scaled-canvas
 //http://dev.opera.com/articles/view/html5-canvas-painting/
+
 //http://wesbos.com/html5-canvas-websockets-nodejs/
 //http://plnkr.co/edit/aG4paH?p=preview
 //https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Canvas_tutorial
+
 //http://www.creativebloq.com/design/learning-basics-html5-canvas-7112879
 //http://stackoverflow.com/questions/7812514/drawing-a-dot-on-html5-canvas
+//http://codetheory.in/different-tools-for-our-sketching-application/
+
 
 //Angular
 //http://www.yearofmoo.com/2013/08/remastered-animation-in-angularjs-1-2.html
